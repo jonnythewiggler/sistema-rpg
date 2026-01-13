@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Sorte": -2,
         "Carisma": -3
     },
-    { name: "Cartógrafo", cost: 3, desc: "começe com um mapa, e saiba ler mapas"},
+    { name: "Cartógrafo", cost: 3, desc: "começe com um mapa, e saiba ler mapas", effects: {}},
     { name: "estudioso", cost: 4, effects: {"Inteligência": 2, "Sabedoria": 3}},
     
     
@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const con = stats["Constituição"];
 
     const pv = 28 + Math.max(0, forca - 4) * 2 + con;
-    const vigor = Math.max(agi) * 2;
+    const vigor = 1 + Math.max(0, (agi) * 2;
     const movimento = 10 + Math.max(0, agi - 4) * 2;
     const defesa = 30 + con;
 
