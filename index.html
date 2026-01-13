@@ -51,6 +51,7 @@
     }
     button:disabled { background: #333; cursor: not-allowed; }
     .points { text-align: center; font-size: 18px; margin-bottom: 10px; }
+    
   </style>
 </head>
 <body>
@@ -168,9 +169,9 @@ document.addEventListener("DOMContentLoaded", () => {
    div.innerHTML = `
   <div>
     <strong>${t.name}</strong>
-    <small style="opacity:0.7; display:block; margin-top:2px;">
-      ${t.desc}
-    </small>
+      <small style="opacity:0.7; display:block; margin-top:2px;">
+    ${t.desc ?? ""}
+  </small>
     <small>
       Custo: ${t.cost} | ${
         Object.entries(t.effects)
