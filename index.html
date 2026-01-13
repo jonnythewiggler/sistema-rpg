@@ -94,23 +94,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const traits = [
     { name: "Atlético", cost: 20, effects: { "Força": 5, "Constituição": 2, "Agilidade": 5 } },
-    { name: "Fumante", cost: -2, effects: { "Constituição": -1 } },
+    { name: "Fumante", cost: -2, desc: "você precisa fumar frequentemente, ou comecará a se sentir ansioso", effects: { "Constituição": -1 } },
     { name: "Sortudo", cost: 5, effects: { "Sorte": 2 } },
     { name: "Desastrado", cost: -3, effects: { "Sorte": -2, "Agilidade": -1 } },
     { name: "Carismático", cost: 2, effects: { "Carisma": 2 } },
     { name: "Antissocial", cost: -2, effects: { "Carisma": -2 } },
-    { name: "Míope", cost: -3, effects: { "Percepção": -2 } },
+    { name: "Míope", cost: -3, desc: "utilizar óculos para miopia nega esse debuff", effects: { "Percepção": -2 } },
     { name: "Obeso", cost: -7, effects: { "Agilidade": -3 } },
-    { name: "Alcoólatra", cost: -6, effects: { "Carisma": -1, "Constituição": 1 } },
+    { name: "Alcoólatra", cost: -6, desc: "você precisa beber frequentemente, ou comecará a se sentir ansioso", effects: { "Carisma": -1, "Constituição": 1 } },
     { name: "Forte", cost: 6, effects: { "Força": 4 } },
     { name: "Olhos de águia", cost: 5, effects: { "Percepção": 3 } },
-    { name: "Vítima de incêndio", cost: -12, effects: { 
+    { name: "Vítima de incêndio", cost: -12, desc: "você têm trauma e medo insenso de fogo", effects: { 
         "Força": -2,
         "Agilidade": -2,
         "Constituição": -2,
         "Sorte": -2,
         "Carisma": -3
-    }}
+    },
+    { name: "Cartógrafo", cost: 3, desc: "começe com um mapa, e saiba ler mapas"},
+    { name: "estudioso", cost: 4, effects: {"Inteligência": 2, "Sabedoria": 3}},
+    
+    
   ];
 
   const selectedTraits = new Set();
@@ -130,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const con = stats["Constituição"];
 
     const pv = 28 + Math.max(0, forca - 4) * 2 + con;
-    const vigor = Math.max(0, agi - 4) * 2;
+    const vigor = Math.max(agi) * 2;
     const movimento = 10 + Math.max(0, agi - 4) * 2;
     const defesa = 30 + con;
 
@@ -161,16 +165,22 @@ document.addEventListener("DOMContentLoaded", () => {
       const div = document.createElement("div");
       div.className = "trait";
 
-      div.innerHTML = `
-        <div>
-          <strong>${t.name}</strong>
-          <small>Custo: ${t.cost} | ${
-            Object.entries(t.effects)
-              .map(([k,v]) => `${k} ${v > 0 ? "+" : ""}${v}`)
-              .join(", ")
-          }</small>
-        </div>
-      `;
+   div.innerHTML = `
+  <div>
+    <strong>${t.name}</strong>
+    <small style="opacity:0.7; display:block; margin-top:2px;">
+      ${t.desc}
+    </small>
+    <small>
+      Custo: ${t.cost} | ${
+        Object.entries(t.effects)
+          .map(([k,v]) => `${k} ${v > 0 ? "+" : ""}${v}`)
+          .join(", ")
+      }
+    </small>
+  </div>
+`;
+
 
       const btn = document.createElement("button");
       btn.textContent = selected ? "Remover" : "Adicionar";
