@@ -88,7 +88,7 @@
   };
 
   let stats = { ...baseStats };
-  let points = 0;
+  let points = 5;
 
   const traits = [
     { name: "Atlético", cost: 20, effects: { Força: 5, Constituição: 2, Agilidade: 5 } },
