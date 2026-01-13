@@ -76,33 +76,41 @@
   </div>
 
 <script>
+document.addEventListener("DOMContentLoaded", () => {
+
   const baseStats = {
-    Força: 4,
-    Agilidade: 4,
-    Inteligência: 4,
-    Constituição: 4,
-    Carisma: 4,
-    Percepção: 4,
-    Sorte: 4,
-    Sabedoria: 4
+    "Força": 4,
+    "Agilidade": 4,
+    "Inteligência": 4,
+    "Constituição": 4,
+    "Carisma": 4,
+    "Percepção": 4,
+    "Sorte": 4,
+    "Sabedoria": 4
   };
 
   let stats = { ...baseStats };
   let points = 5;
 
   const traits = [
-    { name: "Atlético", cost: 20, effects: { Força: 5, Constituição: 2, Agilidade: 5 } },
-    { name: "Fumante", cost: -2, effects: { Inteligência: 0, Sabedoria: 0, Constituição: -1 } },
-    { name: "Sortudo", cost: 5, effects: { Sorte: 2 } },
-    { name: "Desastrado", cost: -3, effects: { Sorte: -2, Agilidade: -1 } },
-    { name: "Carismático", cost: 2, effects: { Carisma: 2 } },
-    { name: "Antissocial", cost: -2, effects: { Carisma: -2 } },
-    { name: "Míope", cost: -3, effects: { Percepção: -2 } },
-    { name: "Obeso", cost: -7, effects: { Agilidade: -3 } },
-    { name: "Alcoólatra", cost: -6, effects: { Carisma: -1, Constituição +1 } },
-    { name: "Forte", cost: 6, effects: { Força: +4 } },
-    { name: "Olhos de águia", cost: 5, effects: { Percepção: +3 } },
-    { name: "Vítima de incêndio", cost: -12, effects: { Força: -2, Agilidade: -2, Constituição: -2, Sorte -2, Carisma -3 } },
+    { name: "Atlético", cost: 20, effects: { "Força": 5, "Constituição": 2, "Agilidade": 5 } },
+    { name: "Fumante", cost: -2, effects: { "Constituição": -1 } },
+    { name: "Sortudo", cost: 5, effects: { "Sorte": 2 } },
+    { name: "Desastrado", cost: -3, effects: { "Sorte": -2, "Agilidade": -1 } },
+    { name: "Carismático", cost: 2, effects: { "Carisma": 2 } },
+    { name: "Antissocial", cost: -2, effects: { "Carisma": -2 } },
+    { name: "Míope", cost: -3, effects: { "Percepção": -2 } },
+    { name: "Obeso", cost: -7, effects: { "Agilidade": -3 } },
+    { name: "Alcoólatra", cost: -6, effects: { "Carisma": -1, "Constituição": 1 } },
+    { name: "Forte", cost: 6, effects: { "Força": 4 } },
+    { name: "Olhos de águia", cost: 5, effects: { "Percepção": 3 } },
+    { name: "Vítima de incêndio", cost: -12, effects: { 
+        "Força": -2,
+        "Agilidade": -2,
+        "Constituição": -2,
+        "Sorte": -2,
+        "Carisma": -3
+    }}
   ];
 
   const selectedTraits = new Set();
@@ -110,23 +118,23 @@
   function renderStats() {
     const el = document.getElementById("stats");
     el.innerHTML = "";
-    for (const [k,v] of Object.entries(stats)) {
+    Object.entries(stats).forEach(([k,v]) => {
       el.innerHTML += `<div class="stat"><span>${k}</span><span class="value">${v}</span></div>`;
-    }
+    });
   }
 
   function calculateDerived() {
-    const calc = document.getElementById("calc");
-    const forca = stats.Força;
-    const agi = stats.Agilidade;
-    const con = stats.Constituição;
+    const el = document.getElementById("calc");
+    const forca = stats["Força"];
+    const agi = stats["Agilidade"];
+    const con = stats["Constituição"];
 
-    let pv = 28 + Math.max(0, forca - 4) * 2 + con;
-    let vigor = Math.max(0, agi - 4) * 2;
-    let movimento = 10 + Math.max(0, agi - 4) * 2;
-    let defesa = 30 + con;
+    const pv = 28 + Math.max(0, forca - 4) * 2 + con;
+    const vigor = Math.max(0, agi - 4) * 2;
+    const movimento = 10 + Math.max(0, agi - 4) * 2;
+    const defesa = 30 + con;
 
-    calc.innerHTML = `
+    el.innerHTML = `
       <div class="calc"><span>Vida Máx (PV)</span><span class="value">${pv}</span></div>
       <div class="calc"><span>Vigor Máx</span><span class="value">${vigor}</span></div>
       <div class="calc"><span>Movimento Máx (m)</span><span class="value">${movimento}</span></div>
@@ -136,9 +144,9 @@
   }
 
   function applyTrait(trait, add) {
-    for (const [s,val] of Object.entries(trait.effects)) {
+    Object.entries(trait.effects).forEach(([s,val]) => {
       stats[s] += add ? val : -val;
-    }
+    });
     points += add ? -trait.cost : trait.cost;
   }
 
@@ -152,10 +160,15 @@
 
       const div = document.createElement("div");
       div.className = "trait";
+
       div.innerHTML = `
         <div>
           <strong>${t.name}</strong>
-          <small>Custo: ${t.cost} | ${Object.entries(t.effects).map(e=>`${e[0]} ${e[1]>0?"+":""}${e[1]}`).join(", ")}</small>
+          <small>Custo: ${t.cost} | ${
+            Object.entries(t.effects)
+              .map(([k,v]) => `${k} ${v > 0 ? "+" : ""}${v}`)
+              .join(", ")
+          }</small>
         </div>
       `;
 
@@ -164,13 +177,8 @@
       btn.disabled = disabled;
 
       btn.onclick = () => {
-        if (selected) {
-          selectedTraits.delete(t.name);
-          applyTrait(t,false);
-        } else {
-          selectedTraits.add(t.name);
-          applyTrait(t,true);
-        }
+        selected ? selectedTraits.delete(t.name) : selectedTraits.add(t.name);
+        applyTrait(t, !selected);
         update();
       };
 
@@ -187,6 +195,7 @@
   }
 
   update();
+});
 </script>
 </body>
 </html>
